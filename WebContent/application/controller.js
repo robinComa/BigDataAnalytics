@@ -22,6 +22,9 @@ controller.on("chartRequest", function(JobRequestListModel) {
 	JobRequestListModel.save();
 
 	chartLine();
+	
+	/** Open tabs for processing */
+	window.open([window.config.url.analysis,'processing.html'].join('/'));
 
 	/** Get Jobs response */
 	var jobsResponseListner = setInterval(function(){

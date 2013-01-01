@@ -47,47 +47,5 @@ $(document).ready(function() {
 		
 	});
 
-	/** Push Simulation */
-	/**
-
-	setInterval(function() {
-		var contryTemplate = [{
-			lon : "30...50:8",
-			lat : "-120...-70:8"
-		}, {
-			lon : "10...30:8",
-			lat : "70...84:8"
-		}, {
-			lon : "40...55:8",
-			lat : "-4...20:8"
-		}, {
-			lon : "-12...-35:8",
-			lat : "110...150:8"
-		}];
-		var dataModelShuffleTemplate = {
-			id : "0...1000000",
-			computedby : ["Robin", "John", "Bill", "Elton", null],
-			coordinates : function() {
-				return DataFixture.generate(contryTemplate, 0)[DataFixture.getRandom(0, 3)];
-			},
-			x : function() {
-				var ramdom = DataFixture.getRandom(6942204, 13253724) * 100000;
-				return ramdom - (ramdom % (1000 * 60 * 60 * 24));
-			},
-			min : "0...6:2",
-			mean : "30...36:2",
-			max : "60...66:2"
-		};
-		var pushShuffleTemplate = {
-			nbData : "0...9"
-		};
-		var nbData = DataFixture.generate(pushShuffleTemplate, 0).nbData;
-		_.each(new LinearListModel(DataFixture.generate(dataModelShuffleTemplate, nbData)).models, function(data) {
-			controller.trigger("dataReceive", data);
-		});
-	}, 5000);
-	*/
-	/** END OF Push Simulation  */
-
 });
 

@@ -1,7 +1,6 @@
 var baseURL = 'http://localhost:8080';
 //var baseURL = 'http://www.mygeopostcard.com';
-var analysisPATH = "BigDataAnalysis";
-var processingPATH = "BigDataProcessing";
+var analysisPATH = "BigDataAnalytics";
 var webServicePATH = "BigDataWebService";
 
 var contryTemplate = [{
@@ -28,7 +27,6 @@ window.config = {
 	},
 	url: {
 		analysis : [baseURL,analysisPATH].join('/'),
-		processing : [baseURL,processingPATH].join('/'),
 		webService : [baseURL,webServicePATH].join('/')
 	}
 };
