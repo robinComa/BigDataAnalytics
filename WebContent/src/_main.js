@@ -1,7 +1,7 @@
 $(document).ready(function() {
 
 	/** Template Loading */
-	$.get([window.config.url.analysis,'application/templates.html'].join('/'), function(templates) {
+	$.get([window.config.url.analysis,'src/templates.html'].join('/'), function(templates) {
 		$('body').append(templates);
 	});
 
