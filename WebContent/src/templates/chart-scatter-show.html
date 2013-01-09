@@ -1,0 +1,56 @@
+<form class="row-fluid" ng-submit="submitJobs()" name="postJobsForm" action="" method="POST">
+	<div class="span4">
+		<div class="row-fluid">
+			<div class="span3">
+				<label>Min : </label>
+			</div>
+			<div class="span9">
+				<input type="text" id="x-min" ng-model="chart.data.x.min" ng-class="chart.data.x.type" value="" class="input-small"/>
+			</div>
+		</div>
+		<div class="row-fluid">
+			<div class="span3">
+				<label>Max : </label>
+			</div>
+			<div class="span9">
+				<input type="text" id="x-max" ng-model="chart.data.x.max" ng-class="chart.data.x.type" value="" class="input-small"/>
+			</div>
+		</div>
+	</div>
+	<div class="span8">
+		<div class="row-fluid">
+			<div class="span4">
+				<label>Service Url : </label>
+			</div>
+			<div class="span8">
+				<select id="services">
+					<option value="{{service.url}}" ng-repeat="service in chart.data.services">
+						{{service.name}}
+					</option>
+				</select>
+				<a href="#/charts/scatters/edit/{{chart.id}}" class="btn btn-danger pull-right"><i class="icon-edit icon-white"></i> {{'edit' | i18n}}</a>
+			</div>
+		</div>
+		<div class="row-fluid">
+			<div class="span4">
+				<label>Nb X by Worker : </label>
+			</div>
+			<div class="span8">
+				<input type="hidden" id="script" value="{{chart.script}}"/>
+				<input type="number" id="worker-nbx" ng-model="chart.data.worker.nbx" value="{{chart.data.worker.nbx}}" min="1"/>
+				<button type="submit" class="btn btn-primary pull-right" data-loading-text="0.0%"><i class="icon-ok icon-white"></i> {{'send' | i18n}}</button>
+			</div>
+		</div>
+	</div>
+	<div class="span12">
+		<div class="progress progress-info">
+			<div id="loading-bar" class="bar" style="width: 0%"></div>
+		</div>
+	</div>
+</form>
+
+<div id="chart"></div>
+
+<br>
+
+<pre class="prettyprint linenums">{{chart.script}}</pre>

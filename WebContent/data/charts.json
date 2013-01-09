@@ -1,0 +1,51 @@
+[
+ {
+  "rank": 1,
+  "id": "scatters",
+  "imageUrl": "img/chart/scatter.png",
+  "name": "Scatter",
+  "snippet": "Scatter chart"
+ },
+ {
+  "rank": 2,
+  "id": "lines",
+  "imageUrl": "img/chart/line.png",
+  "name": "Line",
+  "snippet": "Line chart"
+ },
+ {
+  "rank": 3,
+  "id": "stocks",
+  "imageUrl": "img/chart/stock.png",
+  "name": "Stock",
+  "snippet": "Stock chart"
+ },
+ {
+  "rank": 4,
+  "id": "aeras",
+  "imageUrl": "img/chart/aera.png",
+  "name": "Aera",
+  "snippet": "Aera chart"
+ },
+{
+  "rank": 5,
+  "id": "bars",
+  "imageUrl": "img/chart/bar.png",
+  "name": "Bar",
+  "snippet": "Bar chart"
+ },
+{
+  "rank": 6,
+  "id": "pies",
+  "imageUrl": "img/chart/pie.png",
+  "name": "Pie",
+  "snippet": "Pie chart"
+ },
+{
+  "rank": 7,
+  "id": "other",
+  "imageUrl": "img/chart/other.png",
+  "name": "Other",
+  "snippet": "Other chart"
+ }
+]

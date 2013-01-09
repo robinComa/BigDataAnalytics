@@ -1,0 +1,32 @@
+<div class="container-fluid">
+  <div class="row-fluid">
+    <div class="span3 well">
+ 
+      <input ng-model="query" class="span12 search-query" placeholder="{{'search' | i18n}} ...">
+	  
+	  <hr>
+	  
+	  <ul class="nav nav-list chartsType">
+        <li ng-repeat="chart in chartsType | filter:query | orderBy:orderProp">
+			<p>
+			  <a href="#/charts/{{chart.id}}" class="thumbnail" title="{{chart.snippet}}">
+				  <img ng-src="{{chart.imageUrl}}" height="40" width="40">
+			  </a>
+			</p>
+        </li>
+      </ul>
+	  
+	  <hr>
+	  
+      {{'sort' | i18n}} :
+      <select ng-model="orderProp" class="span6">
+         <option value="rank">{{'rank' | i18n}}</option>
+        <option value="name">{{'alphabetical' | i18n}}</option>
+      </select>
+ 
+    </div>
+    <div class="span9">
+ 
+    </div>
+  </div>
+</div>

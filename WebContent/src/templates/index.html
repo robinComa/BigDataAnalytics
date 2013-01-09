@@ -1,0 +1,51 @@
+<div class="hero-unit">
+	
+	<h1>Big Data Cloud Analytics</h1>
+	
+	<div class="row-fluid">
+		<div class="span5">
+			<form name="signupForm" action="" method="POST" ng-submit="submitSignup()">
+				<label for="login">
+					{{'login.label' | i18n}}
+					<span class="pull-right">
+						<span class="text-info" ng-show="signupForm.login.$error.required">*{{'required' | i18n}}</span>
+						<span class="text-success" ng-show="signupForm.login.$valid">{{'perfect' | i18n}}</span>
+						<span class="text-error" ng-show="signupForm.login.$error.minlength">{{'short' | i18n}}</span>
+						<span class="text-error" ng-show="signupForm.login.$error.maxlength">{{'long' | i18n}}</span>
+					</span>
+				</label>
+				<input type="text" id="login" name="login" class="input-block-level" ng-model="user.login" placeholder="{{'login.signup.placeholder' | i18n}}" required  ng-minlength="6" ng-maxlength="10" ng-change="loginSignupChange()"/>
+				
+				<label for="email">
+					{{'mail.label' | i18n}}
+					<span class="pull-right">
+						<span class="text-info" ng-show="signupForm.email.$error.required">*{{'required' | i18n}}</span>
+						<span class="text-success" ng-show="signupForm.email.$valid">{{'perfect' | i18n}}</span>
+						<span class="text-error" ng-hide="signupForm.email.$valid || signupForm.email.$error.required">{{'incorrect' | i18n}}</span>
+					</span>
+				</label>
+				<input type="email" id="email" name="email" class="input-block-level" ng-model="user.email" placeholder="{{'mail.placeholder' | i18n}}" required ng-change="loginSignupChange()"/>
+				
+				<label for="password">
+					{{'password.label' | i18n}}
+					<span class="pull-right">
+						<span class="text-info" ng-show="signupForm.password.$error.required ">*{{'required' | i18n}}</span>
+						<span class="text-success" ng-show="signupForm.password.$valid">{{'perfect' | i18n}}</span>
+						<span class="text-error" ng-show="signupForm.password.$error.minlength">{{'short' | i18n}}</span>
+						<span class="text-error" ng-show="signupForm.password.$error.maxlength">{{'long' | i18n}}</span>
+					</span>
+				</label>
+				<input type="password" id="password" name="password" class="input-block-level" ng-model="user.password" placeholder="{{'password.signup.placeholder' | i18n}}" required ng-minlength="8" ng-maxlength="20" ng-change="loginSignupChange()"/>
+
+				<br><br>
+				<input type="submit" ng-class="signupDisabled" id="submit-signup" class="btn btn-large btn-success btn-block disabled" value="{{'signup' | i18n}}"/>
+			</form>
+		</div>
+		
+		<div class="span7">
+			<p>{{'hero.description' | i18n}}</p>
+			<a href="#/charts" class="btn btn-large btn-info pull-right">{{'gotoapp' | i18n}}</a>
+		</dv>
+	</div>
+	
+</div>

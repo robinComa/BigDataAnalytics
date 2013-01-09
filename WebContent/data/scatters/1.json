@@ -1,0 +1,36 @@
+﻿{
+  "id": 1,
+  "rank": 1,
+  "name": "MMM Day",
+  "description": "Daily Minimum / Maximun / Mean of thruster 2A",
+  "data": {
+		"services": [
+			{
+				"name": "Local Data",
+				"url": "http://localhost:8080/BigDataBaseSample/tm/toto"
+			},
+			{
+				"name": "Cloud Data",
+				"url": "http://www.mygeopostcard.com/BigDataBase/tm/toto"
+			}
+		],
+		"worker": {
+			"nbx": "10"
+		},
+		"x": {
+			"type": "datetime",
+			"label": "Datetime",
+			"min": "01/01/2012",
+			"max": "01/01/2013"
+		},
+		"y": {
+			"label": "Temperature (°C)",
+			"series": [
+				"min",
+				"max",
+				"mean"
+			]
+		}
+  },
+  "script": "function main(args){\n\tvar min = Number.MAX_VALUE;\n\tvar max = Number.MIN_VALUE;\n\tvar mean = 0.0;\n\tfor (var i in args.plotTelemetry) {\n\t\ti = parseInt(i);\n\t\tvar value = parseFloat(args.plotTelemetry[i].v);\n\t\tif (min > value) {\n\t\t\tmin = value;\n\t\t}\n\t\tif (max < value) {\n\t\t\tmax = value;\n\t\t}\n\t\tmean = (mean * i + value) / (i + 1);\n\t}\n\treturn [\n\t\t{name : 'min', value : min},\n\t\t{name : 'max', value : max},\n\t\t{name : 'mean', value : mean}\n\t];\n}"
+}

@@ -1,0 +1,31 @@
+<div class="container-fluid">
+  <div class="row-fluid">
+    <div class="span3 well">
+ 
+      <input ng-model="query" class="span12 search-query" placeholder="{{'search' | i18n}} ...">
+	  
+	  <hr>
+	  
+	  	  
+	  <ul class="nav nav-list charts">
+        <li ng-repeat="chart in charts | filter:query | orderBy:orderProp">
+		  <a href="#/charts/{{chartType}}/show/{{chart.id}}" title="{{chart.description}}">
+			  {{chart.name}}
+		  </a>
+        </li>
+      </ul>
+	  
+	  <hr>
+	  
+      {{'sort' | i18n}} :
+      <select ng-model="orderProp" class="span6">
+        <option value="rank">{{'rank' | i18n}}</option>
+        <option value="name">{{'alphabetical' | i18n}}</option>
+      </select>
+ 
+    </div>
+    <div class="span9">
+		<a class="btn btn-info" href="#/charts/{{chartType}}/edit/0"><i class="icon-plus icon-white"></i> {{'newchart' | i18n}}</a>
+    </div>
+  </div>
+</div>

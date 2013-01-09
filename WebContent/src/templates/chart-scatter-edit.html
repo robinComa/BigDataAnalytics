@@ -1,0 +1,89 @@
+<form id="form-chart-edit" action="#" method="POST">
+
+	<div class="row-fluid">
+	
+		<input name="id" type="hidden" value="{{chart.id}}"/>
+		
+		<div class="span12">
+			<div class="span4">
+				<label>Name :</label>
+			</div>
+			<div class="span8">
+				<input name="name" type="text" placeholder="Enter a chart name ..." value="{{chart.name}}"/>
+			</div>
+		</div>
+		
+		<div class="span12">
+			<div class="span4">
+				<label>Description :</label>
+			</div>
+			<div class="span8">
+				<textarea name="description" type="text" placeholder="Enter a chart description ...">{{chart.description}}</textarea>
+			</div>
+		</div>
+		
+		<div class="span12">
+			<div class="span4">
+				<label>X Value :</label>
+			</div>
+			<div class="span8">
+				<input name="xlabel" type="text" placeholder="Enter a label for X ..." value="{{chart.data.x.label}}"/><br>
+				<select name="xtype">
+					<option value="datetime">Datetime</option>
+				</select>
+			</div>
+		</div>
+		
+		<div class="span12">
+			<div class="span4">
+				<label>Y Values :</label>
+			</div>
+			<div class="span8">
+				<input name="ylabel" type="text" placeholder="Enter a label for Y ..." value="{{chart.data.y.label}}"/><br>
+				<input name="yseries0" type="text" placeholder="Enter a serie name ..." value="{{chart.data.y.series[0]}}"/><br>
+				<input name="yseries1" type="text" placeholder="Enter a serie name ..." value="{{chart.data.y.series[1]}}"/><br>
+				<input name="yseries2" type="text" placeholder="Enter a serie name ..." value="{{chart.data.y.series[2]}}"/>
+			</div>
+		</div>
+		
+		<div class="span12">
+			<div class="span4">
+				<label>Service :</label>
+			</div>
+			<div class="span8">
+				<input name="servicename0" type="text" placeholder="Enter a name for the service ..." value="{{chart.data.services[0].name}}"/><br>
+				<input name="serviceurl0" type="text" placeholder="Enter the url of the service ..." value="{{chart.data.services[0].url}}"/><br>
+				<input name="servicename1" type="text" placeholder="Enter a name for the service ..." value="{{chart.data.services[1].name}}"/><br>
+				<input name="serviceurl1" type="text" placeholder="Enter the url of the service ..." value="{{chart.data.services[1].url}}"/>
+			</div>
+		</div>
+		
+		<div class="span12">
+			<div class="span4">
+				<label>Worker :</label>
+			</div>
+			<div class="span8">
+				<input name="workernbx" type="number" value="{{chart.data.worker.nbx}}" min="1"/>
+			</div>
+		</div>
+		
+		<div class="span12">
+			<div class="span4">
+				<label>Script :</label>
+			</div>
+			<div class="span8">
+				<textarea name="script" type="text" placeholder="Enter a script to transform data ...">{{chart.script}}</textarea>
+			</div>
+		</div>
+				
+		<div class="span12">
+			<div class="span4"></div>
+			<div class="span8">
+				<a href="#/charts/scatters/" class="btn btn-danger">{{'cancel' | i18n}}</a>
+				<input type="submit" class="btn btn-success" value="{{'save' | i18n}}"/>
+			</div>
+		</div>
+	
+	</div>
+
+</form>
