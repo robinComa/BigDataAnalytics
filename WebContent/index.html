@@ -1,110 +1,123 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!doctype html>
+<html lang="en" ng-app="BigDataAnalytics">
 <head>
-<title>Big Data Analysis</title>
-<script type="text/javascript" src="lib/jquery.min.js"></script>
-<script type="text/javascript" src="lib/underscore.min.js"></script>
-<script type="text/javascript" src="lib/backbone.min.js"></script>
-<script type="text/javascript" src="lib/json2.js"></script>
-<script type="text/javascript" src="lib/datafixture.js"></script>
-<script type="text/javascript" src="lib/bootstrap/bootstrap.min.js"></script>
-<script type="text/javascript" src="lib/bootstrap/bootstrap-datepicker.js"></script>
-<script type="text/javascript" src="lib/highcharts.js"></script>
-<script type="text/javascript" src="src/_config.js"></script>
-<script type="text/javascript" src="src/models.js"></script>
-<script type="text/javascript" src="src/views.js"></script>
-<script type="text/javascript" src="src/controller.js"></script>
-<script type="text/javascript" src="src/_main.js"></script>
-<script type="text/javascript" src="src/chart.js"></script>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	
+	<link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" href="lib/bootstrap/css/bootstrap-responsive.min.css">
+	<link rel="stylesheet" href="lib/bootstrap/css/google.prettify.css">
+	<link rel="stylesheet" href="lib/bootstrap/css/datepicker.css">
+	<link rel="stylesheet" href="css/application.css">
 
-<script type="text/javascript"
-	src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+	<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
 
-<link rel="stylesheet" href="lib/bootstrap/bootstrap.min.css">
-<link rel="stylesheet" href="lib/bootstrap/bootstrap-responsive.min.css">
-<link rel="stylesheet" href="lib/bootstrap/datepicker.css">
-<link rel="stylesheet" href="css/application.css">
+	<title>Big Data Cloud Analytics</title>
+ </head>
+<body ng-controller="BootstrapCtrl">
 
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-</head>
-<body>
-	<div class="row-fluid">
-		<div class="span7">
-			<h3>Request Data</h3>
-			<hr>
-			<form id="request" action="#" class="form-inline">
-				<div class="row-fluid">
-					<div class="span4">
-						<label>Data : </label> <select id="y-value" class="input-small"
-							multiple="multiple">
-							<option value="min" selected="selected">Minimum</option>
-							<option value="mean" selected="selected">Mean</option>
-							<option value="max" selected="selected">Maximun</option>
-						</select>
-					</div>
-					<div class="span4">
-						<div class="row-fluid">
-							<div class="span3">
-								<label>Start : </label>
-							</div>
-							<div class="span9">
-								<input type="text" id="start" value="01/01/2012"
-									class="input-small datepicker" />
-							</div>
+	<header class="header container">
+		<div class="navbar navbar-fixed-top">
+		  <div class="navbar-inner">
+			<div class="container">
+			  
+			  <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+			  <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			  </a>
+			  
+			  <a class="brand" href="#">&nbsp;Big Data Cloud Analytics</a>
+			  			  
+			  <div class="nav-collapse collapse">
+				  <ul class="nav">
+					<li><a href="#"><i class="icon-home icon-white"></i> {{'home' | i18n}}</a></li>				
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+							<i class="icon-flag icon-white"></i> {{'langage' | i18n}}<b class="caret"></b>
+						</a>
+						<ul class="dropdown-menu">
+						  <li><a href="" ng-click="i18n.changeLanguage('en')">{{'english' | i18n}}</a></li>
+						  <li><a href="" ng-click="i18n.changeLanguage('fr')">{{'french' | i18n}}</a></li>
+						</ul>
+					</li>
+					<li>
+						<form class="navbar-search" method="GET" action="https://www.google.com/search">
+							<input type="text" name="as_q" class="search-query input-medium" placeholder="{{'search' | i18n}} ...">
+							<input type="hidden" name="as_sitesearch" value="cloud-bigdata.com">
+						</form>
+					</li>
+				  </ul>
+			  </div>
+			  
+			  <div class="nav-collapse collapse pull-right">
+				  <ul class="nav">
+					  <li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+							<i class="icon-user icon-white"></i> {{'login' | i18n}}<b class="caret"></b>
+						</a>
+						<div class="dropdown-menu pull-right span3 well">
+						  <form name="loginForm" action="" method="POST" ng-submit="submitLogin()">
+							<label for="login-login">{{'login.label' | i18n}}</label>
+							<input type="text" id="login-login" name="login-login" class="input-block-level" ng-model="user.login" placeholder="{{'login.placeholder' | i18n}}" required  ng-minlength="6" ng-maxlength="10" ng-change="loginFormChange()"/>
+							
+							<label for="login-password">{{'password.label' | i18n}}</label>
+							<input type="password" id="login-password" name="login-password" class="input-block-level" ng-model="user.password" placeholder="{{'password.placeholder' | i18n}}" required ng-minlength="8" ng-maxlength="20" ng-change="loginFormChange()"/>
+
+							<a href="" class="pull-right">*{{'password.forgot' | i18n}}</a>
+							<input type="submit" ng-class="loginDisabled" id="submit-login" class="btn btn-info btn-block disabled" value="{{'signin' | i18n}}"/>
+						  </form>
 						</div>
-						<div class="row-fluid">
-							<div class="span3">
-								<label>End : </label>
-							</div>
-							<div class="span9">
-								<input type="text" id="end" value="01/01/2013"
-									class="input-small datepicker" />
-							</div>
-						</div>
-					</div>
-					<div class="span4">
-						<label>Service Url : </label>
-						<select id="service" class="input-small">
-							<option value="http://localhost:8080/BigDataBaseSample/tm/toto" selected="selected">Local data</option>
-							<option value="http://www.mygeopostcard.com/BigDataBase/tm/toto">Cloud Data</option>
-						</select>
-						<label>Split workers by : </label>
-						<select id="split" class="input-small">
-							<option value="1" selected="selected">Day</option>
-							<option value="7">Week</option>
-							<option value="31">Month</option>
-							<option value="366">Years</option>
-						</select> <br> <br>
-					</div>
-					<div class="span12">
-						<br>
-						<div class="span10">
-							<div class="progress progress-info">
-								<div id="loading-bar" class="bar" style="width: 0%"></div>
-							</div>
-						</div>
-						<div class="span1">
-							<input id="btn-submit" type="submit" value="Send"
-								class="btn btn-primary" data-loading-text="0.0%"
-								data-done="0" data-total="0" />
-						</div>
-					</div>
-				</div>
-			</form>
-			<hr>
-			<div id="chart-container"></div>
+					</li>
+				<ul>
+			</div>
+			  
+			</div>
+		  </div>
 		</div>
-		<div class="span5">
-			<h3>Real Time Data Response</h3>
-			<hr>
-			<div class="thumbnail">
+	</header>
+	
+	<div role="main" class="container row-fluid">
+		<div class="row clear-navbar"></div>
+		<div id="alert"></div>
+		
+		<div class="row-fluid">
+			<div class="span1"> </div>
+			<div class="span7">
+				<div ng-view></div>
+			</div>
+			<div class="span3 well">
+				<button class="close">×</button>
+				<h4>{{'realtime' | i18n}}</h4>
 				<div id="map_canvas"></div>
 			</div>
-			<div class="thumbnail">
-				<div id="data-row" class="unstyled"></div>
-			</div>
+			<div class="span1"> </div>
 		</div>
 	</div>
+	
+	<footer class="footer">
+		<div class="container">
+		  <p>{{'poweredby' | i18n}} Robin Coma Delperier 2013</p>
+		</div>
+	</footer>
+
 </body>
+
+<script src="lib/jquery.min.js"></script>
+<script src="lib/angular.min.js"></script>
+<script src="lib/angular-resource.js"></script>
+<script src="lib/bootstrap/bootstrap.min.js"></script>
+<script src="lib/bootstrap/google.prettify.js"></script>
+<script src="lib/bootstrap/bootstrap-datepicker.js"></script>
+<script src="lib/highcharts.js"></script>
+<script src="src/util/alert.js"></script>
+<script src="src/util/chart.js"></script>
+<script src="src/util/map.js"></script>
+<script src="src/util/job.js"></script>
+<script src="src/app.js"></script>
+<script src="src/filters.js"></script>
+<script src="src/controllers.js"></script>
+<script src="src/services.js"></script>
+<script src="src/bootstrap.js"></script>
 
 </html>
