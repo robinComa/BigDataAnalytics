@@ -40,13 +40,11 @@ function Map($scope) {
 		}else{
 			noGeolocation($scope.i18n.get('html5.error'));
 		}
-	}
+	};
 	this.addMarker = function(icon, lon, lat, title, description){
 		try{
 			var map = this.obj;
-			
-			var blueIcon 
-			
+						
 			var marker = new google.maps.Marker({
 				map : map,
 				icon : icon,
@@ -72,6 +70,6 @@ function Map($scope) {
 		}catch(err){
 			$scope.alert.warning($scope.i18n.get('map.marker.error'), err.toString());
 		};
-	}
+	};
 }
 

@@ -10,9 +10,9 @@ function Chart() {
 					symbol : 'circle',
 					radius : 2
 				}
-			}
+			};
 		}
-		new Highcharts.Chart({
+		this.object = new Highcharts.Chart({
 			chart : {
 				renderTo : ELEMENT_ID,
 				type :'scatter',
@@ -50,5 +50,5 @@ function Chart() {
 			},
 			series : series
 		});
-	}
+	};
 }

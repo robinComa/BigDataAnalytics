@@ -7,21 +7,21 @@
 		"services": [
 			{
 				"name": "Local Data",
-				"url": "http://localhost:8080/BigDataBaseSample/tm/toto"
+				"url": "http://localhost:8080/BigDataStorage/tm/toto"
 			},
 			{
 				"name": "Cloud Data",
-				"url": "http://www.mygeopostcard.com/BigDataBase/tm/toto"
+				"url": "http://www.mygeopostcard.com/BigDataStorage/tm/toto"
 			}
 		],
 		"worker": {
-			"nbx": "10"
+			"nbx": "31"
 		},
 		"x": {
 			"type": "datetime",
 			"label": "Datetime",
-			"min": "01/01/2012",
-			"max": "01/01/2013"
+			"min": "01/01/2000",
+			"max": "01/01/2010"
 		},
 		"y": {
 			"label": "Temperature (°C)",

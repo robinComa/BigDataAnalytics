@@ -1,9 +1,26 @@
-function BootstrapCtrl ($scope, $rootScope, I18n) {
+function BootstrapCtrl ($scope, $rootScope, $http, I18n) {
 
-	$scope.urls = {
-		//jobstack : 'http://jobstack.cloud-bigdata.com'
-		jobstack : 'http://localhost:8080/BigDataJobstack'
+	var user = {
+			id : '1234567890',
+			username : 'Robin Coma',
+			token : 'robinToken1234567890',
+			countId : 1
 	};
+	
+	var dev = {
+			user : user,
+			urls : {
+				jobstack : 'http://localhost:8080/BigDataJobStack'
+			}
+	};
+	var prod = {
+			user : user,
+			urls : {
+				jobstack : 'http://jobstack.cloud-bigdata.com'
+			}
+	};
+	
+	$scope.config = dev;
 	
 	$scope.alert = new AlertBox();
 	
@@ -34,7 +51,14 @@ function BootstrapCtrl ($scope, $rootScope, I18n) {
 	/** Map bootstrap */
 	$scope.map = new Map($scope);
 	$scope.map.geolocation(function(coordinates){
+		$scope.config.user.coordinates = {
+				lat : coordinates.latitude,
+				lon : coordinates.longitude
+		};
 		$scope.map.addMarker($scope.map.ICON_HOME, coordinates.latitude, coordinates.longitude, $scope.i18n.get('map.position.titre'), $scope.i18n.get('map.position.description'));
+		/** Jobs worker bootstrap */
+		var jobs = new Jobs();
+		jobs.work($scope, $http);
 	});
 	
 	$scope.loginFormChange = function() {
@@ -50,4 +74,5 @@ function BootstrapCtrl ($scope, $rootScope, I18n) {
 			$scope.alert.warning($scope.i18n.get('not.implemented'), '');
 		}
 	};
+	
 }

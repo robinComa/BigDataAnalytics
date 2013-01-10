@@ -1,4 +1,4 @@
-function IndexCtrl($scope, Chart){
+function RootCtrl($scope, Chart){
 	$scope.user = {
 		login : '',
 		email : '',
@@ -16,7 +16,7 @@ function IndexCtrl($scope, Chart){
 			console.log($scope.user);
 			$scope.alert.warning($scope.i18n.get('not.implemented'), '');
 		}
-	}
+	};
 }
 
 function ChartListCtrl($scope, Chart) {
@@ -50,8 +50,20 @@ function ChartScatterShowCtrl($scope, $routeParams, $http){
 		}, 500);
 		
 		$scope.submitJobs = function(){
-			var jobs = new Jobs($scope, $http);
-			jobs.send();
+			$('#btn-submit-jobs').button('loading');
+			var jobs = new Jobs();
+			jobs.send($scope, $http);
+			jobs.receive($scope, $http, function(data, achievedPorcent, time){
+				for(var i in data){
+					chart.object.series[0].addPoint([parseInt(data[i].x), parseFloat(data[i].y[0].value)], false);
+					chart.object.series[1].addPoint([parseInt(data[i].x), parseFloat(data[i].y[1].value)], false);
+					chart.object.series[2].addPoint([parseInt(data[i].x), parseFloat(data[i].y[2].value)], false);
+					$scope.map.addMarker($scope.map.ICON_GREEN, data[i].coordinates.lat, data[i].coordinates.lon, data[i].requestedby, '');
+				}
+				$('#loading-bar').width(achievedPorcent + '%');
+				$('#btn-submit-jobs').text(achievedPorcent + "%, " + time + "s");
+				chart.object.redraw();
+			});
 			return false;
 		};
 	});

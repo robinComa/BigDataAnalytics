@@ -9,7 +9,7 @@ function AlertBox() {
 			$('<b></b>').text(title + '!')
 		).append(
 			$('<p></p>').html(msg)
-		)
+		);
 		$('#alert').addClass('row-fluid').html('').append($alert);
 		setTimeout(function(){
 			$alert.fadeOut(1000, function(){
@@ -19,14 +19,14 @@ function AlertBox() {
 	}
 	this.info = function(title, msg){
 		template('info', title, msg);
-	}
+	};
 	this.success = function(title, msg){
 		template('success', title, msg);
-	}
+	};
 	this.warning = function(title, msg){
 		template('warning', title, msg);
-	}
+	};
 	this.error = function(title, msg){
 		template('error', title, msg);
-	}
+	};
 }
