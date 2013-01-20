@@ -39,30 +39,42 @@ function ChartDetailListCtrl($scope, $routeParams, $http) {
   });
 }
 
-function ChartScatterShowCtrl($scope, $routeParams, $http){
+function ChartScatterShowCtrl($rootScope, $scope, $routeParams, $http){
 	$http.get('data/scatters/' + $routeParams.id + '.json').success(function(data) {
 		$scope.chart = data;
 		var chart = new Chart();
 		chart.scatter(data);
 		setTimeout(function(){
-			$('.datetime').datepicker();
+			$('.datetime').datepicker({
+					format : 'mm-dd-yyyy'
+			});
 			window.prettyPrint && prettyPrint();
 		}, 500);
 		
 		$scope.submitJobs = function(){
 			$('#btn-submit-jobs').button('loading');
-			var jobs = new Jobs();
+			var jobs = new Jobs($rootScope.trakerService);
 			jobs.send($scope, $http);
 			jobs.receive($scope, $http, function(data, achievedPorcent, time){
-				for(var i in data){
-					chart.object.series[0].addPoint([parseInt(data[i].x), parseFloat(data[i].y[0].value)], false);
-					chart.object.series[1].addPoint([parseInt(data[i].x), parseFloat(data[i].y[1].value)], false);
-					chart.object.series[2].addPoint([parseInt(data[i].x), parseFloat(data[i].y[2].value)], false);
-					$scope.map.addMarker($scope.map.ICON_GREEN, data[i].coordinates.lat, data[i].coordinates.lon, data[i].requestedby, '');
+				for(var index in data){
+					var responses = data[index].data;
+					if(!$.isArray(responses)){
+						responses = [responses];
+					}
+					for(var i in responses){
+						var response = responses[i];
+						chart.object.series[0].addPoint([parseInt(response.x), parseFloat(response.y[0].value)], false);
+						chart.object.series[1].addPoint([parseInt(response.x), parseFloat(response.y[1].value)], false);
+						chart.object.series[2].addPoint([parseInt(response.x), parseFloat(response.y[2].value)], false);
+						$scope.map.addMarker($scope.map.ICON_GREEN, data[index].coordinates.lat, data[index].coordinates.lon, data[index].requestedby, '');
+					}
 				}
 				$('#loading-bar').width(achievedPorcent + '%');
 				$('#btn-submit-jobs').text(achievedPorcent + "%, " + time + "s");
 				chart.object.redraw();
+				if(achievedPorcent >= 100){
+					$rootScope.trakerService.requestCompleted(time);
+				}
 			});
 			return false;
 		};

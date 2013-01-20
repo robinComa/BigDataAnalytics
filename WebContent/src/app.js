@@ -1,4 +1,4 @@
-angular.module('BigDataAnalytics', ['chartTypeServices', 'i18nServices', 'i18nFilter'])
+angular.module('BigDataAnalytics', ['chartTypeServices', 'i18nService', 'i18nFilter', 'trackingService'])
 	.config(['$routeProvider', function($routeProvider) {
 		$routeProvider.
 			when('/', {templateUrl: 'src/templates/root.html', controller: RootCtrl}).

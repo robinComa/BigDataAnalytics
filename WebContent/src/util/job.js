@@ -1,7 +1,7 @@
-function Jobs(){
+function Jobs(tracker){
 
 	var RESOURCE = 'job';
-
+	
 	this.send = function($scope, $http){
 
 		var delta = parseInt($scope.chart.data.worker.nbx);
@@ -21,9 +21,12 @@ function Jobs(){
 
 		//this.jobPorcent = Math.ceil(((max / coef) - (min / coef)) / parseInt($scope.chart.data.worker.nbx));
 		var jobs = [];
+		this.jobsIdToReceive = [];
 		while (min < max){
+			var id = parseInt([$scope.config.user.id,$scope.config.user.countId++].join(''));
+			this.jobsIdToReceive.push(id);
 			jobs.push({
-				id : [$scope.config.user.id,$scope.config.user.countId++].join(''),
+				id : id,
 				service: $('#services').val(),
 				script: $scope.chart.script,
 				x: {
@@ -44,6 +47,7 @@ function Jobs(){
 
 		$http.post([$scope.config.urls.jobstack,RESOURCE,$scope.config.user.id,$scope.config.user.token,'request','collection'].join('/'), JSON.stringify({jobRequest: jobs})).success(function(response){
 			$scope.alert.success($scope.i18n.get('request.was.send', [nbJobs]), '');
+			tracker.requestStarted(nbJobs);
 		}).error(function(data, status, headers, config){
 			var title = $scope.i18n.get('error')  + ' ' + status;
 			if(status == '404'){
@@ -64,6 +68,20 @@ function Jobs(){
 						jobObj.achieved++;
 						results = [data.jobResponse];
 					}
+					
+					/** Remove results already cached */
+					for(var i in results){
+						var index = jobObj.jobsIdToReceive.indexOf(parseInt(results[i].id));
+						if(index == -1){
+							//remove this result
+							results.splice(i, 1);
+							console.log('Job already cached!');
+						}else{
+							//remove job id of the temporary waiting jobs queue
+							jobObj.jobsIdToReceive.splice(index, 1);
+						}
+					}
+
 					jobObj.jobAchieved += results.length;
 					var porcentAchived = ((jobObj.jobAchieved / jobObj.nbJobs) * 100).toFixed(1);
 					var now = new Date();
@@ -71,7 +89,7 @@ function Jobs(){
 					if(porcentAchived >= 100){
 						clearInterval(dataReceiveInterval);
 					}
-					callback(data.jobResponse, porcentAchived, (time / 1000).toFixed(0));
+					callback(results, porcentAchived, (time / 1000).toFixed(0));
 				}	
 			});
 		}, 1000 * 15);
@@ -86,10 +104,12 @@ function Jobs(){
 		/** Worker event */
 		function onError(e) {
 			$scope.alert.error($scope.i18n.get('worker.error'), ['ERROR: Line ', e.lineno, ' in ', e.filename, ': ', e.message].join(''));
+			tracker.jobCompleted('JOB_ERROR_IN_WORKER');
 		}
 
 		function onMsg(e) {
-			/** Push computing results to the client server (cross domain) */
+						
+			/** Push computing results */
 			Worker.prototype.terminate.call($scope.worker.oWorker);
 			$scope.worker.oWorker = false;
 			$http.put([$scope.config.urls.jobstack,RESOURCE,$scope.config.user.id,$scope.config.user.token,'response',$scope.worker.request.id].join('/'),{
@@ -98,10 +118,12 @@ function Jobs(){
 				datetime : $scope.worker.request.datetime,
 				coordinates : $scope.config.user.coordinates,
 				computedby : $scope.config.user.login,
-				x : $scope.worker.request.x.min,
-				y : e.data
+				data : e.data
+			}).success(function(){
+				tracker.jobCompleted('JOB_COMPLETED');
 			}).error(function(data, status, headers, config){
 				$scope.alert.error($scope.i18n.get('worker.error'), $scope.i18n.get('worker.send.response.error'));
+				tracker.jobCompleted('JOB_ERROR_SEND_RESULTS');
 			});
 			setTimeout(function(){
 				startWorker();
@@ -119,43 +141,33 @@ function Jobs(){
 				success : function(req){
 					/** Any Jobs ? */
 					if(req){
-						/** String to script js */
-						// Prefixed in Webkit, Chrome 12, and FF6: window.WebKitBlobBuilder, window.MozBlobBuilder
-						if (!window.BlobBuilder && window.WebKitBlobBuilder) {
-							window.BlobBuilder = window.WebKitBlobBuilder;
-						} else if (!window.BlobBuilder && window.MozBlobBuilder) {
-							window.BlobBuilder = window.MozBlobBuilder;
-						}
-						var bb = new window.BlobBuilder();
-						bb.append('self.onmessage=function(oEvent){postMessage(main(oEvent.data));};' + req.script);
-
-						// Obtain a blob URL reference to our worker 'file'.
-						// Note: window.webkitURL.createObjectURL() in Chrome 10+.
-						var blobURL;
-						if (!window.URL && window.webkitURL.createObjectURL) {
-							blobURL = window.webkitURL.createObjectURL(bb.getBlob());
-						} else {
-							blobURL = window.URL.createObjectURL(bb.getBlob());
-						}
+						var strScript = 'self.onmessage=function(oEvent){postMessage(main(oEvent.data));};' + req.script;
+						var oblob = new Blob([strScript], { "type" : "text\/javascript" });
+						var domainScriptURL = URL.createObjectURL(oblob);
+						domainScriptURL = 'data/mmmDay.js';
 						
 						$scope.map.addMarker($scope.map.ICON_YELLOW, req.coordinates.lat, req.coordinates.lon, req.requestedby, '');
 						$scope.worker.request = req;
-						$scope.worker.oWorker = new Worker(blobURL);
+						
+						$scope.worker.oWorker = new Worker(domainScriptURL);
 						$scope.worker.oWorker.addEventListener('message', onMsg, false);
 						$scope.worker.oWorker.addEventListener('error', onError, false);
-						var url = [req.service,req.x.min,req.x.max].join('/');
+
+						//TODO data.attr in job configuration
 						$.ajax({
-							url : url,
+							url : [req.service,req.x.min,req.x.max].join('/'),
 							type : 'GET',
 							dataType : 'jsonp',
 							jsonp : 'callback',
 							data : {
-								attr : 'v'
+								attr : 'vd'
 							},
 							success : function(data){
+								data.min = req.x.min;
+								data.max = req.x.max;
 								$scope.worker.oWorker.postMessage(data);
-								console.log(new Date() + ' start worker ' + url);
 							},error : function(){
+								tracker.jobCompleted('JOB_ERROR_GET_DATA');
 								setTimeout(function(){
 									startWorker();
 								}, BLANK_DELAY);
